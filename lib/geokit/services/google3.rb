@@ -9,6 +9,7 @@ module Geokit
         res = self.call_geocoder_service("http://maps.google.com/maps/api/geocode/json?sensor=false&latlng=#{Geokit::Inflector::url_escape(latlng.ll)}")
         return GeoLoc.new unless (res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPOK))
         json = res.body
+        json.force_encoding('utf-8') if json.respond_to?(:force_encoding)
         logger.debug "Google reverse-geocoding. LL: #{latlng}. Result: #{json}"
         return self.json2GeoLoc(json)
       end
